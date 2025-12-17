@@ -1,11 +1,54 @@
-<div class="login-form">
-  <h2>Login</h2>
-  <input type="email" [(ngModel)]="email" placeholder="Email" />
-  <input type="password" [(ngModel)]="password" placeholder="Password" />
-  <button (click)="login()">Login</button>
-  <p *ngIf="error" class="error">{{ error }}</p>
-  <p>
-    Don't have an account? 
-    <a [routerLink]="['/register']">Register</a>
-  </p>
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
+
+   
+    <p *ngIf="error" class="text-red-500 text-sm mb-4 text-center">{{ error }}</p>
+
+
+    <form (ngSubmit)="login()" class="space-y-4">
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          placeholder="Enter your email"
+          required
+          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Enter your password"
+          required
+          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
+      >
+        Login
+      </button>
+    </form>
+
+  
+    <p class="mt-4 text-center text-gray-600 text-sm">
+      Don't have an account? 
+      <a [routerLink]="['/register']" class="text-blue-600 hover:underline">Register here</a>
+    </p>
+
+    <p class="mt-2 text-center text-gray-400 text-xs">
+      © 2025 YourCompany. All rights reserved.
+    </p>
+  </div>
 </div>
