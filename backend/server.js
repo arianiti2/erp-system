@@ -1,13 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const connectDB = require("./config/db");
+const connectDB = require("./src/config/db");
 
 // Routes
-const authRoutes = require("./routes/authRoutes");
-const inventoryRoutes = require("./routes/inventoryRoutes");
-const salesRoutes = require("./routes/salesRoutes");
-const customerRoutes = require("./routes/customerRoutes");
+const authRoutes = require("./src/routes/authRoutes");
+const inventoryRoutes = require("./src/routes/inventoryRoutes");
+const salesRoutes = require("./src/routes/salesRoutes");
+const customerRoutes = require("./src/routes/customerRoutes");
 
 dotenv.config();
 connectDB();
