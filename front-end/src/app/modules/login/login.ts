@@ -1,51 +1,49 @@
-// src/app/modules/login/login.ts
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
+import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterLink], 
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login implements OnInit {
-  loginForm!: FormGroup;
-  loading: boolean = false;
-  error: string = '';
+export class Login {
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
-  }
+  protected readonly loading = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
+
+  protected readonly loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
 
   login(): void {
     if (this.loginForm.invalid) return;
 
-    this.loading = true;
-    this.error = '';
+    this.loading.set(true);
+    this.errorMessage.set(null); 
 
-    const { email, password } = this.loginForm.value;
-
-    this.authService.login({ email, password }).subscribe({
+    this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.error = err.error?.message || 'Login failed';
-        this.loading = false;
+    
+        this.errorMessage.set(err.error?.message || 'Login failed! Invalid credentials.');
+        this.loading.set(false);
+        
+    
+        setTimeout(() => this.errorMessage.set(null), 5000);
       },
-      complete: () => {
-        this.loading = false;
-      }
+      complete: () => this.loading.set(false)
     });
   }
 }
