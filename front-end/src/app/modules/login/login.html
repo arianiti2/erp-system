@@ -1,54 +1,94 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
+<div class="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5">
+  <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden" style="max-width:1000px">
+    <div class="md:flex w-full">
 
-   
-    <p *ngIf="error" class="text-red-500 text-sm mb-4 text-center">{{ error }}</p>
+      <!-- Illustration Side -->
+     <div class="hidden md:block w-1/2 bg-indigo-500 py-10 px-10">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="auto">
+    <!-- Background gradient -->
+    <defs>
+      <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#6c63ff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#3f3d56;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#f0f0f0;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#d1d1d1;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+
+    <!-- Abstract circles -->
+    <circle cx="150" cy="150" r="120" fill="url(#grad1)" opacity="0.7"/>
+    <circle cx="400" cy="200" r="100" fill="url(#grad2)" opacity="0.6"/>
+    <circle cx="300" cy="400" r="140" fill="url(#grad1)" opacity="0.5"/>
+
+    <!-- Minimal human figure -->
+    <circle cx="300" cy="300" r="20" fill="#fff"/>
+    <rect x="290" y="320" width="20" height="60" fill="#fff" rx="10"/>
+    <line x1="300" y1="380" x2="260" y2="450" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <line x1="300" y1="380" x2="340" y2="450" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <line x1="300" y1="340" x2="250" y2="300" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <line x1="300" y1="340" x2="350" y2="300" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+</div>
 
 
-    <form (ngSubmit)="login()" class="space-y-4">
-      <div>
-        <label class="block text-gray-700 font-medium mb-1" for="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          [(ngModel)]="email"
-          name="email"
-          placeholder="Enter your email"
-          required
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
+      <!-- Login Form Side -->
+      <div class="w-full md:w-1/2 py-10 px-5 md:px-10">
+        <div class="text-center mb-10">
+          <h1 class="font-bold text-3xl text-gray-900">LOGIN</h1>
+          <p>Enter your credentials to access your account</p>
+        </div>
+
+        <!-- Error Message -->
+        <p *ngIf="error" class="text-red-500 text-sm mb-4 text-center">{{ error }}</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-5">
+          <div>
+            <label class="text-xs font-semibold px-1">Email</label>
+            <div class="flex">
+              <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                <i class="mdi mdi-email-outline text-gray-400 text-lg"></i>
+              </div>
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="john@example.com"
+                class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold px-1">Password</label>
+            <div class="flex">
+              <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center">
+                <i class="mdi mdi-lock-outline text-gray-400 text-lg"></i>
+              </div>
+              <input
+                type="password"
+                formControlName="password"
+                placeholder="************"
+                class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loginForm.invalid || loading"
+            class="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700
+                   text-white rounded-lg px-3 py-3 font-semibold transition disabled:opacity-50"
+          >
+            {{ loading ? 'Logging in...' : 'LOGIN' }}
+          </button>
+        </form>
+
+        <p class="mt-4 text-center text-gray-600 text-sm">
+          Don't have an account? 
+          <a [routerLink]="['/register']" class="text-indigo-500 hover:underline">Register here</a>
+        </p>
       </div>
-
-      <div>
-        <label class="block text-gray-700 font-medium mb-1" for="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-          placeholder="Enter your password"
-          required
-          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-      </div>
-
-      <button
-        type="submit"
-        class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
-      >
-        Login
-      </button>
-    </form>
-
-  
-    <p class="mt-4 text-center text-gray-600 text-sm">
-      Don't have an account? 
-      <a [routerLink]="['/register']" class="text-blue-600 hover:underline">Register here</a>
-    </p>
-
-    <p class="mt-2 text-center text-gray-400 text-xs">
-      © 2025 YourCompany. All rights reserved.
-    </p>
+    </div>
   </div>
 </div>
