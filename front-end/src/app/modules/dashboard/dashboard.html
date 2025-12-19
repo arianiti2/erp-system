@@ -1,1 +1,90 @@
-<p>dashboard works!</p>
+<div class="min-h-screen bg-gray-100 p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-700">Dashboard</h1>
+    <button class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition">Add New</button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <!-- Users Card -->
+    <div class="bg-white shadow rounded-lg p-5">
+      <h2 class="text-gray-400 text-sm font-medium">Users</h2>
+      <p class="text-2xl font-bold text-gray-800">{{ stats.users }}</p>
+      <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
+        <div class="bg-green-500 h-2 rounded-full" [style.width.%]="stats.usersChange"></div>
+      </div>
+      <p class="text-green-500 text-sm mt-1">+{{ stats.usersChange }}%</p>
+    </div>
+
+    <!-- Revenue Card -->
+    <div class="bg-white shadow rounded-lg p-5">
+      <h2 class="text-gray-400 text-sm font-medium">Revenue</h2>
+      <p class="text-2xl font-bold text-gray-800">${{ stats.revenue }}</p>
+      <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
+        <div class="bg-indigo-500 h-2 rounded-full" [style.width.%]="stats.revenueChange"></div>
+      </div>
+      <p class="text-green-500 text-sm mt-1">+{{ stats.revenueChange }}%</p>
+    </div>
+
+    <!-- Orders Card -->
+    <div class="bg-white shadow rounded-lg p-5">
+      <h2 class="text-gray-400 text-sm font-medium">Orders</h2>
+      <p class="text-2xl font-bold text-gray-800">{{ stats.orders }}</p>
+      <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
+        <div class="bg-red-500 h-2 rounded-full" [style.width.%]="stats.ordersChange"></div>
+      </div>
+      <p class="text-red-500 text-sm mt-1">-{{ stats.ordersChange }}%</p>
+    </div>
+
+    <!-- Visitors Card -->
+    <div class="bg-white shadow rounded-lg p-5">
+      <h2 class="text-gray-400 text-sm font-medium">Visitors</h2>
+      <p class="text-2xl font-bold text-gray-800">{{ stats.visitors }}</p>
+      <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
+        <div class="bg-green-500 h-2 rounded-full" [style.width.%]="stats.visitorsChange"></div>
+      </div>
+      <p class="text-green-500 text-sm mt-1">+{{ stats.visitorsChange }}%</p>
+    </div>
+  </div>
+
+  <!-- Dummy Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white shadow rounded-lg p-5">
+      <h3 class="text-gray-700 font-bold mb-4">Revenue Over Time</h3>
+      <div class="h-40 flex items-end space-x-2">
+        @for (val of revenueData; track $index) {
+          <div class="bg-indigo-500 w-6 rounded" [style.height.px]="val"></div>
+        } @empty {
+          <p class="text-gray-400 text-sm">No revenue data available</p>
+        }
+      </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-5">
+      <h3 class="text-gray-700 font-bold mb-4">User Growth</h3>
+      <div class="h-40 flex items-end space-x-2">
+        @for (val of userData; track $index) {
+          <div class="bg-green-500 w-6 rounded" [style.height.px]="val"></div>
+        } @empty {
+          <p class="text-gray-400 text-sm">No growth data available</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activities -->
+  <div class="bg-white shadow rounded-lg p-5 mt-6">
+    <h3 class="text-gray-700 font-bold mb-4">Recent Activities</h3>
+    <ul class="divide-y divide-gray-200">
+      @for (activity of recentActivities; track activity?.time) {
+        <li class="py-3 flex justify-between">
+          <span>{{ activity.description }}</span>
+          <span class="text-gray-400 text-sm">{{ activity.time }}</span>
+        </li>
+      } @empty {
+        <li class="py-3 text-gray-500 italic">No recent activities found.</li>
+      }
+    </ul>
+  </div>
+</div>
