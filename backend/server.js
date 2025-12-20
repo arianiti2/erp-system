@@ -4,7 +4,7 @@ const cors = require("cors");
 const connectDB = require("./src/config/db");
 const { errorHandler } = require("./src/middlewares/errorMiddleware");
 const morgan = require("morgan");
-
+const path = require('path'); 
 // Routes
 const authRoutes = require("./src/routes/authRoutes");
 const inventoryRoutes = require("./src/routes/inventoryRoutes");
@@ -26,7 +26,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/sales", salesRoutes);
 app.use("/api/customers", customerRoutes);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Error middleware
 app.use(errorHandler);
 
