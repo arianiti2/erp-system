@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./src/config/db");
-const { errorHandler } = require("./src/middlewares/errorMiddleware");
 const morgan = require("morgan");
 const path = require('path'); 
 // Routes
@@ -10,7 +9,8 @@ const authRoutes = require("./src/routes/authRoutes");
 const inventoryRoutes = require("./src/routes/inventoryRoutes");
 const salesRoutes = require("./src/routes/salesRoutes");
 const customerRoutes = require("./src/routes/customerRoutes");
-
+// const errorHandler = require("./middleware/errorMiddleware");
+const errorHandler = require('../backend/src/middlewares/errorMiddleware')
 dotenv.config();
 connectDB();
 

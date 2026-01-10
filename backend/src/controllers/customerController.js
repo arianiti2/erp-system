@@ -19,8 +19,13 @@ const getCustomerById = asyncHandler(async (req, res) => {
 
 // Create customer
 const createCustomer = asyncHandler(async (req, res) => {
-  const { name, email, phone, address } = req.body;
-  const customer = await Customer.create({ name, email, phone, address });
+  const payload = req.body;
+
+  if (!payload || !payload.name) {
+    res.status(400);
+    throw new Error('Customer name is required');
+  }
+  const customer = await Customer.create(payload);
   res.status(201).json(customer);
 });
 

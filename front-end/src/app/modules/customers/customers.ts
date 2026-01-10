@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
+import { CustomersService } from '../../services/customers.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -19,6 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class Customers {
   private fb = inject(FormBuilder);
+  private customersService = inject(CustomersService);
   
   
   customers = signal<any[]>([]);
@@ -72,15 +74,20 @@ export class Customers {
   onSubmit() {
     if (this.customerForm.valid) {
       const payload = {
-        ...this.customerForm.getRawValue(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        createdBy: 'currentUserId'
-      };
+      ...this.customerForm.getRawValue(),
+    };;
       
-      this.customers.update(list => [payload, ...list]);
-      this.customerForm.reset({ status: 'Active', preferredCurrency: 'USD', paymentTerms: 'Net 30' });
-      this.shippingAddresses.clear();
+     
+      this.customersService.create(payload as any).subscribe({
+        next: created => {
+          this.customers.update(list => [created, ...list]);
+          this.customerForm.reset({ status: 'Active', preferredCurrency: 'USD', paymentTerms: 'Net 30' });
+          this.shippingAddresses.clear();
+        },
+        error: err => {
+          console.error('Failed to create customer', err);
+        }
+      });
     }
   }
 }
