@@ -111,6 +111,30 @@ export class Customers implements OnInit{
       }
     });
   }
+  deleteCustomer(item: any) {
+
+  if (confirm(`Are you sure you want to delete ${item.name}?`)) {
+
+    this.customersService.delete(item?._id).subscribe({
+      next: () => {
+      
+        this.customers.update((current) => current.filter(c => c.id !== item.id));
+        this._changeDetectorRef.markForCheck();
+      this.snackBar.open(`${item.name} deleted successfully!`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-success']
+      });
+        console.log(`${item.name} deleted successfully.`);
+      },
+      error: (err: any) => {
+        console.error('Error deleting customer:', err);
+      }
+    });
+  }
+}
+
   removeShippingAddress(index: number) {
     this.shippingAddresses.removeAt(index);
   }
