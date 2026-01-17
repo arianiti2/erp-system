@@ -11,6 +11,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Customereditdialog } from './dialogs/customereditdialog/customereditdialog';
 import { MatDialogRef } from '@angular/material/dialog'
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ViewEncapsulation } from '@angular/core';
 @Component({
   selector: 'app-customers',
   standalone: true,
@@ -18,11 +20,14 @@ import { MatDialogRef } from '@angular/material/dialog'
     CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, 
     MatSelectModule, MatButtonModule, MatIconModule, MatDividerModule, MatDialogModule
   ],
-  templateUrl: './customers.html'
+  templateUrl: './customers.html',
+  styleUrl: './customers.css',
+   encapsulation: ViewEncapsulation.None 
 })
 export class Customers implements OnInit{
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   private customersService = inject(CustomersService);
    dialogRef!: MatDialogRef<any>; 
   
@@ -75,13 +80,23 @@ export class Customers implements OnInit{
     openEditDialog(customer: any) {
     const dialogRef = this.dialog.open(Customereditdialog, {
       data: customer,
-      width: '500px'
+        width: '90%',       
+       maxWidth: '1000px'
     });
 
     dialogRef.afterClosed().subscribe(updatedCustomer => {
+      console.log('Dialog closed with data:', updatedCustomer);
       if (updatedCustomer) {
         // update the local signal array
         this.customers.update(list => list.map(c => c.customerId === updatedCustomer.customerId ? updatedCustomer : c));
+
+         this.snackBar.open('Customer updated successfully!', 'Close', {
+  duration: 3000,
+  horizontalPosition: 'end',
+  verticalPosition: 'top',
+  panelClass: ['snackbar-success']
+});
+
       }
     });
   }

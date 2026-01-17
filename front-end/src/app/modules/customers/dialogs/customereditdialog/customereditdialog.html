@@ -174,14 +174,21 @@
   </form>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end" class="gap-2 px-6 pb-6">
-  <button mat-button type="button" (click)="cancel()">Cancel</button>
+<mat-dialog-actions align="start" class="px-12 pb-6">
+ 
+
   <button
     mat-flat-button
-    color="primary"
     type="button"
     (click)="save()"
-    [disabled]="editForm.invalid">
-    Save Changes
+    [disabled]="editForm.invalid"
+    class="!bg-amber-400 !text-black hover:!bg-amber-500 disabled:!bg-gray-200 px-12"
+  >
+    <mat-icon class="mr-1">edit</mat-icon>
+    Save
+  </button>
+
+   <button mat-button type="button" (click)="cancel()">
+    Cancel
   </button>
 </mat-dialog-actions>

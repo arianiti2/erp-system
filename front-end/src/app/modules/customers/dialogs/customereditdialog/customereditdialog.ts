@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../../../environment/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-customer-edit-dialog',
@@ -34,7 +36,7 @@ export class Customereditdialog implements OnInit {
   private fb = inject(NonNullableFormBuilder);
   private dialogRef = inject(MatDialogRef<Customereditdialog>);
   public customer = inject(MAT_DIALOG_DATA);
-
+  private http = inject(HttpClient); 
 
   readonly editForm = this.fb.group({
     customerId: [''],
@@ -71,17 +73,24 @@ export class Customereditdialog implements OnInit {
     }
   }
 
-  private populateForm(customer: any): void {
-   
-    this.editForm.patchValue(customer);
+ private populateForm(customer: any): void {
+  this.editForm.patchValue({
+    ...customer,
+    customerId: customer._id   
+  });
 
+  
 
-    if (customer.shippingAddresses?.length) {
-      customer.shippingAddresses.forEach((addr: any) => {
-        this.addShippingAddress(addr);
-      });
-    }
+ 
+  this.shippingAddresses.clear();
+
+  if (customer.shippingAddresses?.length) {
+    customer.shippingAddresses.forEach((addr: any) => {
+      this.addShippingAddress(addr);
+    });
   }
+}
+
 
   addShippingAddress(data?: any): void {
     const addressGroup = this.fb.group({
@@ -100,10 +109,24 @@ export class Customereditdialog implements OnInit {
   }
 
   save(): void {
-    if (this.editForm.valid) {
-      this.dialogRef.close(this.editForm.getRawValue());
-    }
-  }
+  if (this.editForm.invalid) return;
+
+  const formValue = this.editForm.getRawValue();
+  const customerId = formValue.customerId;
+
+  
+  this.http.put(`${environment.apiUrl}/customers/${customerId}`, formValue)
+    .subscribe({
+      next: (response: any) => {
+        console.log('Update successful', response);
+        this.dialogRef.close(response); 
+      },
+      error: (err) => {
+        console.error('Update failed', err);
+        alert(err.error?.message || 'Failed to save changes. Please try again.');
+      }
+    });
+}
 
   cancel(): void {
     this.dialogRef.close();
