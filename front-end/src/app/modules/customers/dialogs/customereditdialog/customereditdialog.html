@@ -1,0 +1,187 @@
+
+<div class="flex justify-between items-center pr-2">
+  <h2 mat-dialog-title class="!m-0">Edit Customer</h2>
+  <button mat-icon-button (click)="cancel()" aria-label="Close dialog">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <form [formGroup]="editForm" class="p-4 space-y-4">
+
+   
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Company Name</mat-label>
+        <input matInput formControlName="name" placeholder="Enter company name">
+        @if (editForm.get('name')?.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Contact Person</mat-label>
+        <input matInput formControlName="contactPerson">
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email">
+        @if (editForm.get('email')?.hasError('email')) {
+          <mat-error>Invalid email format</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Alternate Phone</mat-label>
+        <input matInput formControlName="alternatePhone">
+      </mat-form-field>
+    </div>
+
+
+    <div class="grid grid-cols-2 gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option value="Low">Low</mat-option>
+          <mat-option value="Medium">Medium</mat-option>
+          <mat-option value="High">High</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Credit Limit</mat-label>
+        <input matInput type="number" formControlName="creditLimit">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment Terms</mat-label>
+        <mat-select formControlName="paymentTerms">
+          <mat-option value="Net 15">Net 15</mat-option>
+          <mat-option value="Net 30">Net 30</mat-option>
+          <mat-option value="Net 60">Net 60</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Customer Type</mat-label>
+        <mat-select formControlName="customerType">
+          <mat-option value="Company">Company</mat-option>
+          <mat-option value="Individual">Individual</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <mat-select formControlName="preferredCurrency">
+          <mat-option value="USD">USD</mat-option>
+          <mat-option value="EUR">EUR</mat-option>
+          <mat-option value="GBP">GBP</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+   
+    <fieldset formGroupName="billingAddress" class="border border-gray-200 rounded-lg p-4">
+      <legend class="px-2 font-bold text-sm text-gray-500">BILLING ADDRESS</legend>
+      
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Street</mat-label>
+        <input matInput formControlName="street">
+      </mat-form-field>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <input matInput formControlName="state">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>ZIP</mat-label>
+          <input matInput formControlName="zip">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="country">
+        </mat-form-field>
+      </div>
+    </fieldset>
+
+
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-md font-bold">Shipping Addresses</h3>
+        <button mat-button type="button" color="primary" (click)="addShippingAddress()">
+          <mat-icon>add</mat-icon> Add Address
+        </button>
+      </div>
+
+      <div formArrayName="shippingAddresses" class="space-y-4">
+    
+        @for (address of shippingAddresses.controls; track address; let i = $index) {
+          <div [formGroupName]="i" class="relative border border-dashed border-gray-300 rounded p-4 bg-gray-50">
+            <button mat-icon-button color="warn" class="absolute top-2 right-2" (click)="removeShippingAddress(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Address Label (e.g. Warehouse 1)</mat-label>
+              <input matInput formControlName="label">
+            </mat-form-field>
+
+            <div class="grid grid-cols-2 gap-3">
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <input matInput formControlName="country">
+              </mat-form-field>
+            </div>
+          </div>
+        } @empty {
+          <p class="text-sm text-gray-400 italic">No shipping addresses added.</p>
+        }
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Special Instructions</mat-label>
+      <textarea matInput rows="3" formControlName="specialInstructions"></textarea>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2 px-6 pb-6">
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="save()"
+    [disabled]="editForm.invalid">
+    Save Changes
+  </button>
+</mat-dialog-actions>

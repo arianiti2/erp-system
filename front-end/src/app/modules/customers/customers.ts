@@ -8,20 +8,23 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Customereditdialog } from './dialogs/customereditdialog/customereditdialog';
+import { MatDialogRef } from '@angular/material/dialog'
 @Component({
   selector: 'app-customers',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, 
-    MatSelectModule, MatButtonModule, MatIconModule, MatDividerModule
+    MatSelectModule, MatButtonModule, MatIconModule, MatDividerModule, MatDialogModule
   ],
   templateUrl: './customers.html'
 })
 export class Customers implements OnInit{
   private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
   private customersService = inject(CustomersService);
-  
+   dialogRef!: MatDialogRef<any>; 
   
   customers = signal<any[]>([]);
 
@@ -68,6 +71,19 @@ export class Customers implements OnInit{
       country: ['']
     });
     this.shippingAddresses.push(addressGroup);
+  }
+    openEditDialog(customer: any) {
+    const dialogRef = this.dialog.open(Customereditdialog, {
+      data: customer,
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(updatedCustomer => {
+      if (updatedCustomer) {
+        // update the local signal array
+        this.customers.update(list => list.map(c => c.customerId === updatedCustomer.customerId ? updatedCustomer : c));
+      }
+    });
   }
   loadCustomers() {
     this.customersService.getAll().subscribe({
