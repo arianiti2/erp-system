@@ -10,7 +10,8 @@ const inventoryRoutes = require("./src/routes/inventoryRoutes");
 const salesRoutes = require("./src/routes/salesRoutes");
 const customerRoutes = require("./src/routes/customerRoutes");
 // const errorHandler = require("./middleware/errorMiddleware");
-const errorHandler = require('../backend/src/middlewares/errorMiddleware')
+const  errorHandler  = require('./src/middlewares/errorMiddleware');
+
 dotenv.config();
 connectDB();
 
